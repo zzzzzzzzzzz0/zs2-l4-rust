@@ -18,7 +18,7 @@ impl pars_::U11_ for U11_ {
 }
 
 pub fn w__() -> world_::T_ {
-	let w = world_::t__(World_::new());
+	let w = t__(World_::new());
 	{
 		let kws = &mut as_mut_ref__!(w).kws_;
 		kws.add__ (  dl_::NAME_, keyword_::Id_::U11);

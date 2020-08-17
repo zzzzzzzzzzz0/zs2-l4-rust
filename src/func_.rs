@@ -22,7 +22,7 @@ impl code_::Item_ for Item_ {
 	fn a__(&self) -> code_::ORL_ {self.super_.a__()}
 	fn a2__(&self) -> code_::ORL_ {self.super_.a2__()}
 
-	fn hello__(&self, env:&code_::Env_, wm:&mut WorldMut_, ret:&mut result_::List_) -> Result2_ {
+	fn hello__(&self, env:&code_::Env_) -> Result2_ {
 		let funcs = match as_mut_ref__!(env.q).obj_mut__(0) {
 			Some(o) => o,
 			None => return result2_::err2__(dl_::NAME_)
@@ -30,16 +30,16 @@ impl code_::Item_ for Item_ {
 		let mut funcs = as_mut_ref__!(funcs);
 		let funcs = funcs.downcast_mut::<funcs_::List_>().unwrap();
 		
-		let mut names = result_::List_::new();
-		let mut vals = result_::List_::new();
-		self.super_.hello2_1__(&mut names, &mut vals, env, wm)?;
-		let names = names.to_vec__();
-		let vals = vals.to_vec__();
+		let names = t__(result_::List_::new());
+		let vals = t__(result_::List_::new());
+		self.super_.hello2_1__(names.clone(), vals.clone(), env)?;
+		let names = as_ref__!(names).to_vec__();
+		let vals = as_ref__!(vals).to_vec__();
 		match funcs.add__(&vals) {
 			Ok(i) => {
 				let val = result_::oi__(Box::new(i));
 				if names.is_empty() {
-					ret.add4__(val)
+					as_mut_ref__!(env.ret).add4__(val)
 				} else {
 					qv_::val2__(&names[0], val, false, false, env.q.clone(), env.w.clone());
 				}

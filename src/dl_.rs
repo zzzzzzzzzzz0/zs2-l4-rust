@@ -21,11 +21,12 @@ impl code_::Item_ for Item_ {
 		ok__()
 	}
 	fn a__(&self) -> code_::ORL_ {t_::some__(&self.a_)}
-	fn hello__(&self, env:&code_::Env_, wm:&mut WorldMut_, _ret:&mut result_::List_) -> Result2_ {
-		let mut ret2 = result_::List_::new();
-		t_::o__(&self.a_).hello__(env, wm, &mut ret2)?;
-
-		match funcs_::List_::new(&ret2.to_vec__()) {
+	fn hello__(&self, env:&code_::Env_) -> Result2_ {
+		let ret2 = t__(result_::List_::new());
+		t_::o__(&self.a_).hello__(&code_::Env_::new6(ret2.clone(), env))?;
+	
+		let v = as_ref__!(ret2).to_vec__();
+		match funcs_::List_::new(&v) {
 			Ok(funcs) => {
 				as_mut_ref__!(env.q).add_obj_mut__(Box::new(funcs));
 				ok__()

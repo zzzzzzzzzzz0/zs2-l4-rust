@@ -89,10 +89,11 @@ pub fn set__(argv:&Vec<String>, ret:&mut result_::List_) -> Result2_ {
 	}
 }
 
-pub fn par__(obj_i:usize, obj_i2:usize, env:&code_::Env_, wm:&mut WorldMut_, ret:&mut result_::List_) -> Result<(), (i32, Result2_)> {
-	let args = &as_ref__!(env.q).args_;
-	if wm.dbg_.arg_ {
-		wm.dbg_.arg__(args);
+pub fn par__(obj_i:usize, obj_i2:usize, env:&code_::Env_) -> Result<(), (i32, Result2_)> {
+	let q = as_ref__!(env.q);
+	let args = &as_ref__!(q.args_);
+	if as_ref__!(env.w).dbg_.arg_ {
+		as_ref__!(env.w).dbg_.arg__(args);
 	}
 	let mut ret2 = ok__();
 	let mut ret3 = 0;
@@ -122,7 +123,7 @@ pub fn par__(obj_i:usize, obj_i2:usize, env:&code_::Env_, wm:&mut WorldMut_, ret
 				}
 				let mut q = Qv_::new2(as_ref__!(env.q).up_.clone());
 				{
-					let args = &mut q.args_;
+					let args = &mut as_mut_ref__!(q.args_);
 					for i in argv {
 						if !args.is_empty() {
 							as_ref__!(env.w).dunhao__(args);
@@ -164,7 +165,7 @@ pub fn par__(obj_i:usize, obj_i2:usize, env:&code_::Env_, wm:&mut WorldMut_, ret
 				fa2.add__("tag", &item.tag_);
 				fa2.add__("argc", item.argc_);
 
-				ret2 = eval_::hello__(src, &mut code_::Env_::new4(&code_::attr_::ori__(fa2), qv_::t__(q.clone()), env), wm, ret);
+				ret2 = eval_::hello__(src, &mut code_::Env_::new4(code_::attr_::i__(Some(fa2)), t__(q.clone()), env));
 				return if ret2.is_ok() {0} else {1}
 			}
 			other__(tag, true)
@@ -184,7 +185,8 @@ pub fn par__(obj_i:usize, obj_i2:usize, env:&code_::Env_, wm:&mut WorldMut_, ret
 }
 
 pub fn help__(from:usize, q:qv_::T_, ret:&mut result_::List_) {
-	let args = &as_ref__!(q).args_;
+	let q = as_ref__!(q);
+	let args = &as_ref__!(q.args_);
 	for i in from..args.len() {
 		if !args.obj__(i, |cp:&List_| {
 			ret.add__(cp.help__());

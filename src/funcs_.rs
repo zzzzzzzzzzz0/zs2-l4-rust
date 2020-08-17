@@ -1,4 +1,4 @@
-use zhscript2::u_::*;
+use zhscript2::{u_::*, as_ref__, as_mut_ref__};
 use std::{mem, ffi::CStr, str, fmt};
 use libloading::{Library, os::unix as limp_};
 
@@ -16,7 +16,7 @@ pub enum Typ_ {
 
 pub type RI_ = Rc_<Item_>;
 
-pub type Ptr2_ = fn(env:&code_::Env_, wm:&mut WorldMut_, ret:&mut result_::List_) -> Result2_;
+pub type Ptr2_ = fn(env:&code_::Env_) -> Result2_;
 
 #[derive(Debug)]
 pub enum Ptr__ {
@@ -98,8 +98,7 @@ impl Item_ {
 		ret
 	}
 	
-	pub fn call__(&self, argv2:&Vec<Typ_>, args:&result_::List_, start:usize,
-			env:&code_::Env_, wm:&mut WorldMut_, ret:&mut result_::List_) -> Result2_ {
+	pub fn call__(&self, argv2:&Vec<Typ_>, args:&result_::List_, start:usize, env:&code_::Env_) -> Result2_ {
 		match self.p_ {
 			Ptr__::Ptr => {
 				let args = args.to_vec5__(start);
@@ -192,6 +191,7 @@ impl Item_ {
 				let mut ret_float: f64 = 0.0;
 				let p = self.p_0_.unwrap();
 				call_::call__(p, &args2, &fargs2, &mut ret_low, &mut ret_high, &mut ret_float);
+				let mut ret = as_mut_ref__!(env.ret);
 				match self.ret_ {
 					Typ_::Void => {}
 					Typ_::Int => ret.add__(ret_low as i32),
@@ -216,9 +216,9 @@ impl Item_ {
 				}
 			}
 			Ptr__::Ptr2 => {
-				let mut q2 = Qv_::new2(Some(env.q.clone()));
+				let q2 = Qv_::new2(Some(env.q.clone()));
 				{
-					let args2 = &mut q2.args_;
+					let args2 = &mut as_mut_ref__!(q2.args_);
 					{
 						let mut idx = start;
 						let mut args2__ = |argv:&Vec<Typ_>| {
@@ -257,10 +257,10 @@ impl Item_ {
 						}
 					}
 				}
-				if wm.dbg_.arg_ {
-					wm.dbg_.arg__(&q2.args_);
+				if as_ref__!(env.w).dbg_.arg_ {
+					as_ref__!(env.w).dbg_.arg__(&as_ref__!(q2.args_));
 				}
-				self.p_1_.unwrap()(&code_::Env_::new2(qv_::t__(q2), env), wm, ret)?;
+				self.p_1_.unwrap()(&code_::Env_::new2(t__(q2), env))?;
 				match self.ret_ {
 					Typ_::Void => {}
 					_ => return result2_::err__(format!("返回类型 {:?} 不支持", self.ret_))
@@ -421,9 +421,6 @@ pub struct List_ {
 impl List_ {
 	pub fn new(path:&[String]) -> Result<Self, String> {
 		let mut lang_ = String::from("c");
-		if path.is_empty() {
-			return Ok(Self {lib_:Library::from(limp_::Library::this()), a_:vec![], lang_})
-		}
 		let mut err = String::new();
 		for path in path {
 			if path.starts_with('<') && path.ends_with('>') {
@@ -440,7 +437,10 @@ impl List_ {
 				}
 			}
 		}
-		Err(err)
+		if !err.is_empty() {
+			return Err(err)
+		}
+		Ok(Self {lib_:Library::from(limp_::Library::this()), a_:vec![], lang_})
 	}
 	
 	pub fn add__(&mut self, vals:&[String]) -> Result<RI_, String> {

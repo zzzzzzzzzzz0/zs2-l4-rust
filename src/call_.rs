@@ -24,10 +24,11 @@ impl code_::Item_ for Item_ {
 		ok__()
 	}
 	fn a__(&self) -> code_::ORL_ {t_::some__(&self.a_)}
-	fn hello__(&self, env:&code_::Env_, wm:&mut WorldMut_, ret:&mut result_::List_) -> Result2_ {
-		let mut ret2 = result_::List_::new();
+	fn hello__(&self, env:&code_::Env_) -> Result2_ {
+		let ret2 = t__(result_::List_::new());
 		let mut ret3 = ok__();
-		t_::o__(&self.a_).hello__(env, wm, &mut ret2)?;
+		t_::o__(&self.a_).hello__(&code_::Env_::new6(ret2.clone(), env))?;
+		let ret2 = as_ref__!(ret2);
 		if !ret2.obj__(0, |fi:&funcs_::RI_| {
 			let mut argv2 = vec![];
 			let mut start = 1;
@@ -45,7 +46,7 @@ impl code_::Item_ for Item_ {
 				}
 				start += 1
 			}
-			ret3 = fi.call__(&argv2, &ret2, start, env, wm, ret);
+			ret3 = fi.call__(&argv2, &ret2, start, env);
 			ret3.is_ok()
 		}) && ret3.is_ok() {
 			return result2_::err__(format!("第一个非{}变量", super::func_::NAME_))

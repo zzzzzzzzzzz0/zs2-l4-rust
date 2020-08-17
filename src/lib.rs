@@ -9,4 +9,5 @@ mod funcs_;
 pub mod i_;
 
 pub mod clpars4_;
+pub mod thread4_;
 
