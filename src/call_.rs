@@ -26,26 +26,25 @@ impl code_::Item_ for Item_ {
 	fn a__(&self) -> code_::ORL_ {t_::some__(&self.a_)}
 	fn hello__(&self, env:&code_::Env_) -> Result2_ {
 		let ret2 = t__(result_::List_::new());
-		let mut ret3 = ok__();
 		t_::o__(&self.a_).hello__(&code_::Env_::new6(ret2.clone(), env))?;
 		let ret2 = as_ref__!(ret2);
-		if !ret2.obj__(0, |fi:&funcs_::RI_| {
-			let mut argv2 = vec![];
-			let mut start = 1;
-			while start < ret2.len() {
-				let i = as_ref__!(ret2[start]);
-				if i.dunhao__() {
-					start += 1;
-					break
-				}
-				let mut s = String::new();
-				i.s__(&mut s);
-				if let Err(e) = funcs_::Item_::pargs2__(&s, &mut argv2) {
-					ret3 = result2_::err__(e);
-					return false
-				}
-				start += 1
+		let mut argv2 = vec![];
+		let mut start = 1;
+		while start < ret2.len() {
+			let i = as_ref__!(ret2[start]);
+			if i.dunhao__() {
+				start += 1;
+				break
 			}
+			let mut s = String::new();
+			i.s__(&mut s);
+			if let Err(e) = funcs_::typ_::pargs2__(&s, &mut argv2) {
+				return result2_::err__(e);
+			}
+			start += 1
+		}
+		let mut ret3 = ok__();
+		if !ret2.obj__(0, |fi:&funcs_::RI_| {
 			ret3 = fi.call__(&argv2, &ret2, start, env);
 			ret3.is_ok()
 		}) && ret3.is_ok() {
