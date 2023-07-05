@@ -23,25 +23,40 @@ impl code_::Item_ for Item_ {
 	fn a2__(&self) -> code_::ORL_ {self.super_.a2__()}
 
 	fn hello__(&self, env:&code_::Env_) -> Result2_ {
-		let funcs = match as_mut_ref__!(env.q).obj_mut__(0) {
-			Some(o) => o,
-			None => return result2_::err2__(dl_::NAME_)
-		};
-		let mut funcs = as_mut_ref__!(funcs);
-		let funcs = funcs.downcast_mut::<funcs_::List_>().unwrap();
-		
 		let names = t__(result_::List_::new());
 		let vals = t__(result_::List_::new());
 		self.super_.hello2_1__(names.clone(), vals.clone(), env)?;
 		let names = as_ref__!(names).to_vec__();
 		let vals = as_ref__!(vals).to_vec__();
-		match funcs.add__(&vals) {
+
+		let ret = if !vals.is_empty() && vals[0].starts_with("*") {
+			let s = vals[0][1..].to_string();
+			if let Ok(l) = s.parse::<u64>() {
+				match funcs_::Item_::new(l as funcs_::Ptr_, if vals.len() > 1 {&vals[1]} else {""}) {
+					Ok(i) => Ok(Rc_::new(i)),
+					Err(s) => Err(s),
+				}
+			} else {
+				Err(s)
+			}
+		} else {
+			let funcs = match as_mut_ref__!(env.q).obj_mut__(0) {
+				Some(o) => o,
+				None => return result2_::err2__(dl_::NAME_)
+			};
+			let mut funcs = as_mut_ref__!(funcs);
+			let funcs = funcs.downcast_mut::<funcs_::List_>().unwrap();
+			funcs.add__(&vals, &names)
+		};
+		match ret {
 			Ok(i) => {
 				let val = result_::oi__(Box::new(i));
 				if names.is_empty() {
 					as_mut_ref__!(env.ret).add4__(val)
 				} else {
-					qv_::val2__(&names[0], val, false, false, env.q.clone(), env.w.clone());
+					for i in 0..names.len() {
+						qv_::val2__(&names[i], val.clone(), false, false, false, env.q.clone(), env.w.clone());
+					}
 				}
 			}
 			Err(s) => return result2_::err__(s)
