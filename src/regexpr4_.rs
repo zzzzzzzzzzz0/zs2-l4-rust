@@ -10,15 +10,16 @@ fn r__(s:&str) -> Result<Regex, result2_::Err_> {
 }
 
 fn cb__(src:&str, cm: &Captures, get:bool, env:&code_::Env_) -> Result2_ {
-	//let q = Qv_::new2(Some(env.q.clone()));
 	let q = Qv_::new2(as_ref__!(env.q).up_.clone());
 	{
 		let args = &mut as_mut_ref__!(q.args_);
-		for idx in 1..cm.len() {
-			if !args.is_empty() {
-				as_ref__!(env.w).dunhao__(args);
+		for i in cm.iter().skip(1) {
+			if let Some(m) = i {
+				if !args.is_empty() {
+					as_ref__!(env.w).dunhao__(args);
+				}
+				args.add__(m.as_str());
 			}
-			args.add__(&cm[idx]);
 		}
 	}
 	eval_::hello__(src, &mut if get {
@@ -47,13 +48,6 @@ pub fn for__(args:&Vec<String>, get:u8, env:&code_::Env_) -> Result2_ {
 			0 => false,
 			_ => true,
 		}, env);
-		/*if ret2.is_err() {
-			if let Err((i, _, ref s, _)) = ret2 {
-				if i == jump_::BREAK_ && s.is_empty() {break}
-				if i == jump_::CONTINUE_ && s.is_empty() {continue}
-			}
-			return ret2
-		}*/
 		jump_::for_err2__(ret2, &mut only_b)?;
 		if only_b {break;}
 	}
