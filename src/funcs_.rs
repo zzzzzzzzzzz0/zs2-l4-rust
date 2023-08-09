@@ -76,13 +76,17 @@ impl Item_ {
 				let ret3:*mut Result2_ = Box::into_raw(Box::new(ok__()));
 				{
 					let mut push_s__ = |i:&str, args2:&mut Vec<usize>| {
-						self.push__(if i.ends_with("\0") {
-							i.as_ptr()
-						} else {
-							let s = i.to_string() + "\0";
-							args_0.push(s);
-							args_0[args_0.len() - 1].as_ptr()
-						}, args2)
+						match i {
+							"NULL" | "NULL\0" => self.push__(0, args2),
+							_ =>
+								self.push__(if i.ends_with("\0") {
+									i.as_ptr()
+								} else {
+									let s = i.to_string() + "\0";
+									args_0.push(s);
+									args_0[args_0.len() - 1].as_ptr()
+								}, args2)
+						}
 					};
 					let mut idx = 0;
 					let mut args2__ = |argv:&Vec<Typ_>| {
