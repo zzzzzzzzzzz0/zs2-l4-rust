@@ -60,7 +60,7 @@ pub fn args__(argc:i32, argv:&mut &mut I8_) -> Result<Vec<String>, std::str::Utf
 	unsafe {
 		std::slice::from_raw_parts(argv, argc as usize)
 			.iter()
-			.map(|s| CStr::from_ptr(*s).to_str().map(ToString::to_string))
+			.map(|s| Ok(s__(*s)))
 			.collect()
 	}
 }
