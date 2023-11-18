@@ -33,7 +33,11 @@ impl code_::Item_ for Item_ {
 		while start < ret2.len() {
 			let i = as_ref__!(ret2[start]);
 			if i.dunhao__() {
-				start += 1;
+				if start == ret2.len() - 1 {
+					argv2.push(funcs_::typ_::Typ_::CharPtr);
+				} else {
+					start += 1;
+				}
 				break
 			}
 			let mut s = String::new();
