@@ -1,6 +1,7 @@
 use zhscript2::{u_::*, as_ref__, as_mut_ref__};
 
 pub fn z__(env:&code_::Env_, from:usize) -> Result2_ {
+	//保有这一区用于标志等临时变量
 	let mut q2 = Some(env.q.clone());
 	let mut src = String::new();
 	let mut next = false;
