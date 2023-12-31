@@ -125,23 +125,25 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 	let lou2 = RefCell_::new(true);
 	let test = RefCell_::new(false);
 	let pause = RefCell_::new(vec![]);
+	let part = RefCell_::new(false);
+	const PART:i32 = -1;
 	let i_add = RefCell_::new(0);
 	let mut ret2 = ok__();
 	let mut ret3:Result_ = Ok(());
+	let mut ret4 = 0;
 	if obj_i < args.len() && args.obj__(obj_i, |cp:&List_| {
 		let args = args.to_vec__();
 		let helpo = args.len();
 		{
 			let cp = List_::new2(vec![
-				Item_::new("-漏|-试"),
+				Item_::new("-漏|-试|-段"),
 				Item_::new2c("-暂停", 1),
 			]);
 			let _ = cp.for3__(&mut args.clone().into_iter().skip(obj_i2), |tag, argv, _, _, _, _| {
 				match tag {
-					"-漏" =>
-						*as_mut_ref__!(lou2) = false,
-					"-试" =>
-						*as_mut_ref__!(test) = true,
+					"-漏" => *as_mut_ref__!(lou2) = false,
+					"-试" => *as_mut_ref__!(test) = true,
+					"-段" => *as_mut_ref__!(part) = true,
 					"-暂停" => as_mut_ref__!(pause).push(argv[0].clone()),
 					_ => return 0
 				}
@@ -212,19 +214,42 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 			}
 			return true
 		}
+		let part2 = |tag:&str| {
+			*as_ref__!(part) && tag == "---"
+		};
 		ret3 = cp.for3__(&mut args.into_iter().skip(obj_i2 + *as_ref__!(i_add)), |tag, argv, argc0, item, i3, no0| {
+			if part2(tag) {
+				return PART;
+			}
+			ret4 += 1 + argv.len() - argc0;
 			cb(tag, argv, argc0, item, i3, no0)
 		}, |tag| {
+			if part2(tag) {
+				return PART;
+			}
 			other(tag, true)
 		});
 		true
 	}) {
+		let part2 = || {
+			let mut ret = as_mut_ref__!(env.ret);
+			as_ref__!(env.w).dunhao__(&mut ret);
+			ret.add__(ret4);
+		};
 		if let Err((ret3, s)) = ret3 {
+			if *as_ref__!(part) && ret3 == PART {
+				part2();
+				return Ok(())
+			}
 			if *as_ref__!(test) {
 				as_mut_ref__!(env.ret).add__(ret3);
 				return Ok(())
 			}
 			return Err((ret3, world_::clpars_ret2__(ret3, s, ret2, env.w.clone())))
+		} else {
+			if *as_ref__!(part) {
+				part2();
+			}
 		}
 		Ok(())
 	} else {
