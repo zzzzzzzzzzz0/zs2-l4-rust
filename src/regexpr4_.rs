@@ -61,7 +61,7 @@ pub fn for__(args:&Vec<String>, get:u8, env:&code_::Env_) -> Result2_ {
 fn repla_1__(r:Regex, txt:&str, src:&str, get:u8, env:&code_::Env_) -> Result2_ {
 	let mut ret2 = ok__();
 	let ret = match get {
-		b'1' | 11 =>
+		11 =>
 			r.replace_all(txt, |cm: &Captures| {
 				let ret4 = t__(result_::List_::new());
 				ret2 = cb__(src, cm, true, &code_::Env_::new6(ret4.clone(), env));
@@ -73,17 +73,6 @@ fn repla_1__(r:Regex, txt:&str, src:&str, get:u8, env:&code_::Env_) -> Result2_ 
 	};
 	as_mut_ref__!(env.ret).add__(&ret);
 	ret2
-}
-
-pub fn repla__(args:&Vec<String>, env:&code_::Env_) -> Result2_ {
-	if args.len() < 4 {
-		return g_::err__('<')
-	}
-	let r = r__(&args[2])?;
-	repla_1__(r, &args[1], &args[3], match args[0].as_str() {
-		"1" => b'1',
-		_ => 0
-	}, env)
 }
 
 pub fn test__(argv:&Vec<String>) -> Result<bool, Result2_> {
