@@ -124,6 +124,7 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 
 	let lou2 = RefCell_::new(true);
 	let test = RefCell_::new(false);
+	let pause_no = RefCell_::new(false);
 	let pause = RefCell_::new(vec![]);
 	let part = RefCell_::new(false);
 	const PART:i32 = -1;
@@ -136,7 +137,7 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 		let helpo = args.len();
 		{
 			let cp = List_::new2(vec![
-				Item_::new("-漏|-试|-段"),
+				Item_::new("-漏|-试|-段|-反暂停"),
 				Item_::new2c("-暂停", 1),
 			]);
 			let _ = cp.for3__(&mut args.clone().into_iter().skip(obj_i2), |tag, argv, _, _, _, _| {
@@ -144,6 +145,7 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 					"-漏" => *as_mut_ref__!(lou2) = false,
 					"-试" => *as_mut_ref__!(test) = true,
 					"-段" => *as_mut_ref__!(part) = true,
+					"-反暂停" => *as_mut_ref__!(pause_no) = true,
 					"-暂停" => as_mut_ref__!(pause).push(argv[0].clone()),
 					_ => return 0
 				}
@@ -162,8 +164,23 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 				if src.is_empty() {
 					return other(tag, false)
 				}
-				if *as_ref__!(test) || as_ref__!(pause).iter().any(|i| item.tagv_.contains(i)) {
+				if *as_ref__!(test) {
 					return 0
+				}
+				{
+					let pause = as_ref__!(pause);
+					if !pause.is_empty() {
+						let no = *as_ref__!(pause_no);
+						if pause.iter().any(|i| item.tagv_.contains(i)) {
+							if !no {
+								return 0
+							}
+						} else {
+							if no {
+								return 0
+							}
+						}
+					}
 				}
 				let mut q = Qv_::new2(as_ref__!(env.q).up_.clone());
 				{
