@@ -11,7 +11,7 @@ use_rusty_asm = ["rusty-asm"]
 i8_u8 = []
 
 [dependencies]
-zhscript2 = {version = "4.4.7", path = "../zhscript2-rust", features = ["thread"]}
+zhscript2 = {version = "4.6.6", path = "../zhscript2-rust", features = ["thread"]}
 libloading = "0.5.0"
 rusty-asm = {version = "0.2.1", optional = true}
 regex = "1.3.4"
