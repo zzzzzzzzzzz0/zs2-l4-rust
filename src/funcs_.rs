@@ -1,6 +1,6 @@
 use zhscript2::{u_::*, as_ref__, as_mut_ref__};
 use super::g_;
-use std::{mem, ffi::{CStr}, str, fmt};
+use std::{mem, ffi::{CStr}, str, fmt, borrow::Cow};
 use libloading::{Library, os::unix as limp_};
 
 #[cfg(feature = "i8_u8")]
@@ -14,11 +14,24 @@ pub mod callback_;
 pub mod typ_;
 use typ_::*;
 
-fn s__<'a>(i:*const I8_) -> &'a str {
+/*fn s__<'a>(i:*const I8_) -> &'a str {
 	if i as usize == 0 {
 		"NULL"
 	} else {unsafe {
-		CStr::from_ptr(i).to_str().unwrap()
+		match CStr::from_ptr(i).to_str() {
+			Ok(s) => s,
+			Err(_) => "Utf8Error"
+		}
+	}}
+}*/
+fn s__(i:*const I8_) -> String {
+	if i as usize == 0 {
+		"NULL".to_string()
+	} else {unsafe {
+		match CStr::from_ptr(i).to_string_lossy() {
+			Cow::Borrowed(s) => s.to_string(),
+			Cow::Owned(s) => String::from(s),
+		}
 	}}
 }
 
