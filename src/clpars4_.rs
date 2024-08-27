@@ -123,6 +123,7 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 	}
 
 	let lou2 = RefCell_::new(true);
+	let lou3 = RefCell_::new(false);
 	let test = RefCell_::new(false);
 	let pause_no = RefCell_::new(false);
 	let pause = RefCell_::new(vec![]);
@@ -137,21 +138,30 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 		let helpo = args.len();
 		{
 			let cp = List_::new2(vec![
-				Item_::new("-漏|-试|-段|-反暂停"),
+				Item_::new("-漏|-头严|-试|-段|-反暂停|-过|-help-head"),
 				Item_::new2c("-暂停", 1),
 			]);
-			let _ = cp.for3__(&mut args.clone().into_iter().skip(obj_i2), |tag, argv, _, _, _, _| {
+			ret3 = cp.for3__(&mut args.clone().into_iter().skip(obj_i2), |tag, argv, _, _, _, _| {
 				match tag {
 					"-漏" => *as_mut_ref__!(lou2) = false,
+					"-头严" => *as_mut_ref__!(lou3) = true,
 					"-试" => *as_mut_ref__!(test) = true,
 					"-段" => *as_mut_ref__!(part) = true,
 					"-反暂停" => *as_mut_ref__!(pause_no) = true,
 					"-暂停" => as_mut_ref__!(pause).push(argv[0].clone()),
+					"-过" => {}
+					"-help-head" => return HELP_,
 					_ => return 0
 				}
 				*as_mut_ref__!(i_add) += 1 + argv.len();
-				0
+				match tag {
+					"-过" => 1,
+					_ => 0
+				}
 			}, |_| 1);
+			if let Err((HELP_, _)) = &ret3 {
+				return true;
+			}
 		}
 		let other = |tag:&str, lou| {
 			match tag {
@@ -163,9 +173,6 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 			if let Cb_::S(src) = &item.cb_ {
 				if src.is_empty() {
 					return other(tag, false)
-				}
-				if *as_ref__!(test) {
-					return 0
 				}
 				{
 					let pause = as_ref__!(pause);
@@ -181,6 +188,12 @@ pub fn par__(obj_i:usize, obj_i2:usize, help_i:usize, env:&code_::Env_) -> Resul
 							}
 						}
 					}
+				}
+				if *as_ref__!(lou3) && item.tag_.is_empty() && tag.starts_with('-') {
+					return other(tag, true)
+				}
+				if *as_ref__!(test) {
+					return 0
 				}
 				let mut q = Qv_::new2(as_ref__!(env.q).up_.clone());
 				{
