@@ -11,6 +11,8 @@ mod dl_;
 #[cfg(not(feature = "no_dl"))]
 mod func_;
 #[cfg(not(feature = "no_dl"))]
+mod func_next_;
+#[cfg(not(feature = "no_dl"))]
 mod call_;
 #[cfg(not(feature = "no_dl"))]
 pub mod funcs_;

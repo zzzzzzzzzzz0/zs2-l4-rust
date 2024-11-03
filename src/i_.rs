@@ -13,6 +13,9 @@ impl pars_::U11_ for U11_ {
 		if kw.s_ == func_::NAME_ {
 			return code_::oi__(func_::Item_::new(kw, kws))
 		}
+		if kw.s_ == func_next_::NAME_ {
+			return code_::oi__(func_next_::Item_::new(kw, kws))
+		}
 		if kw.s_ == call_::NAME_ {
 			return code_::oi__(call_::Item_::new(kw))
 		}
@@ -30,6 +33,7 @@ pub fn w__() -> world_::T_ {
 				let kws = &mut as_mut_ref__!(w).kws_;
 				kws.add__ (  dl_::NAME_, keyword_::Id_::U11);
 				kws.add3__(func_::NAME_, keyword_::Id_::U11, keyword_::Grp_ {set_:true, ..Default::default()});
+				kws.add3__(func_next_::NAME_, keyword_::Id_::U11, keyword_::Grp_ {set_:true, ..Default::default()});
 				kws.add__ (call_::NAME_, keyword_::Id_::U11);
 
 				kws.add__("为", keyword_::Id_::Dunhao);
